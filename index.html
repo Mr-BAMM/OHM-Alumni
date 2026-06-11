@@ -4,270 +4,60 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EFI Absolventenfeier 2025 – TH Nürnberg</title>
-
-  <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-
   <style>
-    /* ── OHM Brand Colors ── */
     :root {
-      --ohm-red:    #E2001A;
-      --ohm-dark:   #1A1A1A;
-      --ohm-light:  #F5F5F5;
-      --ohm-gold:   #F0C040;
+      --ohm-red:  #E2001A;
+      --ohm-dark: #1A1A1A;
+      --ohm-gold: #F0C040;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Background image – fixed via pseudo-element (iOS-safe) */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--ohm-dark) url('Assets/background.jpg') center/cover fixed;
-      color: #fff;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       overflow-x: hidden;
+      background-color: #f0e0e0;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url('Assets/background.jpg') center top / cover no-repeat;
+      pointer-events: none;
     }
 
-    /* ── Hero Header ── */
+    /* All direct children above the bg pseudo-element */
+    header, .ribbon, main, footer { position: relative; z-index: 1; }
+
+    /* ── Header ── */
     header {
       width: 100%;
       background: var(--ohm-red);
       text-align: center;
-      padding: 24px 20px 20px;
-      position: relative;
+      padding: 18px 20px 16px;
+      box-shadow: 0 2px 16px rgba(226, 0, 26, 0.4);
     }
-
     header img.ohm-logo {
       height: 80px;
       object-fit: contain;
       filter: brightness(0) invert(1);
     }
-
-    /* ── Main Content ── */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 20px 24px;
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-      gap: 28px;
-    }
-
-    /* ── Trophy / Emoji Badge ── */
-    .badge {
-      font-size: clamp(64px, 18vw, 96px);
-      line-height: 1;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-12px); }
-    }
-
-    /* ── Headline ── */
-    h1 {
-      font-size: clamp(1.6rem, 6vw, 2.4rem);
+    #ohm-text-fallback {
+      display: none;
+      color: #fff;
+      font-size: 1.1rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      color: #fff;
-    }
-    h1 span { color: var(--ohm-gold); }
-
-    .subtitle {
-      font-size: clamp(1rem, 4vw, 1.15rem);
-      color: rgba(255,255,255,0.75);
-      line-height: 1.5;
+      letter-spacing: 0.05em;
     }
 
-    /* ── Buttons ── */
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-    }
-
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      padding: 18px 24px;
-      border-radius: 16px;
-      font-size: clamp(1rem, 4vw, 1.15rem);
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      border: none;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn:active { transform: scale(0.97); }
-
-    .btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0.12);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .btn:hover::after { opacity: 1; }
-
-    /* Button 1 – Photos */
-    .btn-photos {
-      background: var(--ohm-red);
-      color: #fff;
-      box-shadow: 0 8px 28px rgba(226,0,26,0.45);
-    }
-
-    /* Button 2 – NFC */
-    .btn-nfc {
-      background: #fff;
-      color: var(--ohm-dark);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-    }
-
-    .btn-icon {
-      font-size: 1.5em;
-      flex-shrink: 0;
-    }
-
-    .btn-text {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 2px;
-    }
-    .btn-title  { font-size: 1em; font-weight: 700; }
-    .btn-desc   { font-size: 0.72em; font-weight: 400; opacity: 0.75; }
-
-    /* ── Divider label ── */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      color: rgba(255,255,255,0.35);
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(255,255,255,0.15);
-    }
-
-    /* ── Confetti Button ── */
-    #confettiBtn {
-      background: none;
-      border: 2px solid rgba(255,255,255,0.25);
-      color: rgba(255,255,255,0.65);
-      border-radius: 50px;
-      padding: 10px 22px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    #confettiBtn:hover {
-      border-color: var(--ohm-gold);
-      color: var(--ohm-gold);
-    }
-
-    /* ── Footer ── */
-    footer {
-      width: 100%;
-      padding: 20px 24px 28px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .footer-label {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .logo-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .logo-row img {
-      height: 38px;
-      object-fit: contain;
-    }
-
-    .logo-row .smarttap-logo {
-      filter: brightness(0) invert(1);
-      opacity: 0.85;
-    }
-
-    .logo-row .ohm-footer-logo {
-      filter: brightness(0) invert(1);
-      opacity: 0.85;
-    }
-
-    /* ── Hero Shout ── */
-    .hero-shout {
-      font-size: clamp(2rem, 8vw, 3.2rem);
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      line-height: 1.15;
-      background: linear-gradient(120deg, #F0C040 0%, #FF9500 40%, #F0C040 80%, #FFD700 100%);
-      background-size: 250% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: goldShimmer 2.5s linear infinite;
-      padding: 4px 0;
-    }
-    @keyframes goldShimmer {
-      from { background-position: 0% center; }
-      to   { background-position: 250% center; }
-    }
-    .shout-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .logo-divider {
-      width: 1px;
-      height: 32px;
-      background: rgba(255,255,255,0.2);
-    }
-
-    /* ── Dark overlay over background image ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 5, 5, 0.62);
-      pointer-events: none;
-      z-index: 0;
-    }
-    header, main, footer { position: relative; z-index: 1; }
-
-    /* ── Ribbon decoration ── */
+    /* ── Ribbon ── */
     .ribbon {
       width: 100%;
       height: 4px;
@@ -284,12 +74,199 @@
       from { background-position: 200% 0; }
       to   { background-position: -200% 0; }
     }
+
+    /* ── Main glass card ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 22px;
+      padding: 32px 22px 28px;
+      width: calc(100% - 32px);
+      max-width: 500px;
+      margin: 20px 16px;
+      background: rgba(255, 251, 250, 0.87);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow:
+        0 4px 32px rgba(226, 0, 26, 0.12),
+        0 1px 6px rgba(0, 0, 0, 0.07);
+      color: var(--ohm-dark);
+    }
+
+    /* ── Badge ── */
+    .badge {
+      font-size: clamp(58px, 16vw, 84px);
+      line-height: 1;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* ── Headline ── */
+    h1 {
+      font-size: clamp(1.45rem, 5.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+      color: var(--ohm-dark);
+    }
+    h1 span { color: var(--ohm-red); }
+
+    /* ── Hero Shout ── */
+    .hero-shout {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(110deg, var(--ohm-red) 0%, #ff3333 45%, var(--ohm-red) 100%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: redShimmer 3s linear infinite;
+    }
+    @keyframes redShimmer {
+      from { background-position: 0% center; }
+      to   { background-position: 250% center; }
+    }
+
+    /* ── Buttons ── */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      width: 100%;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 17px 20px;
+      border-radius: 14px;
+      font-size: clamp(0.95rem, 4vw, 1.08rem);
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .btn:hover::after { opacity: 1; }
+
+    .btn-photos {
+      background: var(--ohm-red);
+      color: #fff;
+      box-shadow: 0 6px 22px rgba(226, 0, 26, 0.38);
+    }
+    .btn-nfc {
+      background: var(--ohm-dark);
+      color: #fff;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    .btn-icon { font-size: 1.4em; flex-shrink: 0; }
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .btn-title { font-size: 1em; font-weight: 700; }
+    .btn-desc  { font-size: 0.71em; font-weight: 400; opacity: 0.72; }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      color: rgba(26, 26, 26, 0.3);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(26, 26, 26, 0.12);
+    }
+
+    /* ── Confetti button ── */
+    #confettiBtn {
+      background: none;
+      border: 2px solid rgba(226, 0, 26, 0.3);
+      color: var(--ohm-red);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    #confettiBtn:hover {
+      background: var(--ohm-red);
+      border-color: var(--ohm-red);
+      color: #fff;
+    }
+
+    /* ── Footer ── */
+    footer {
+      width: 100%;
+      padding: 18px 24px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: var(--ohm-red);
+      box-shadow: 0 -2px 16px rgba(226, 0, 26, 0.35);
+    }
+    .footer-label {
+      font-size: 0.67rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .logo-row img { height: 36px; object-fit: contain; }
+    .logo-row .ohm-footer-logo  { filter: brightness(0) invert(1); opacity: 0.92; }
+    .logo-row .smarttap-logo    { filter: brightness(0) invert(1); opacity: 0.92; }
+    .logo-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Header with OHM Logo -->
   <header>
     <img
       class="ohm-logo"
@@ -297,38 +274,23 @@
       alt="TH Nürnberg – Technische Hochschule Georg Simon Ohm"
       onerror="this.style.display='none'; document.getElementById('ohm-text-fallback').style.display='block';"
     />
-    <div id="ohm-text-fallback" style="display:none; font-size:1.1rem; font-weight:800; letter-spacing:0.05em;">
-      TH NÜRNBERG · GEORG SIMON OHM
-    </div>
+    <div id="ohm-text-fallback">TH NÜRNBERG · GEORG SIMON OHM</div>
   </header>
 
-  <!-- Shimmer ribbon -->
   <div class="ribbon"></div>
 
-  <!-- Main -->
   <main>
 
-    <!-- Trophy -->
     <div class="badge">🎓</div>
 
-    <!-- Headline -->
-    <div>
-      <h1>Herzlichen Glückwunsch,<br /><span>EFI-Absolventinnen<br />&amp; Absolventen!</span></h1>
-    </div>
+    <h1>Herzlichen Glückwunsch,<br /><span>EFI-Absolventinnen<br />&amp; Absolventen!</span></h1>
 
-    <div class="shout-wrap">
-      <div class="hero-shout">Ihr habt es geschafft!</div>
-    </div>
+    <div class="hero-shout">Ihr habt es geschafft!</div>
 
-    <!-- CTA Buttons -->
     <div class="btn-group">
-
-      <a
-        class="btn btn-photos"
-        href="https://www.th-nuernberg.de/fakultaeten/efi/alumni"
-        target="_blank"
-        rel="noopener"
-      >
+      <a class="btn btn-photos"
+         href="https://www.th-nuernberg.de/fakultaeten/efi/alumni"
+         target="_blank" rel="noopener">
         <span class="btn-icon">📸</span>
         <span class="btn-text">
           <span class="btn-title">Fotos der Absolventenfeier</span>
@@ -336,94 +298,46 @@
         </span>
       </a>
 
-      <a
-        class="btn btn-nfc"
-        href="https://youtube.com/shorts/VVWerG0CZU4"
-        target="_blank"
-        rel="noopener"
-      >
+      <a class="btn btn-nfc"
+         href="https://youtube.com/shorts/VVWerG0CZU4"
+         target="_blank" rel="noopener">
         <span class="btn-icon">📲</span>
         <span class="btn-text">
           <span class="btn-title">NFC-Chip beschreiben</span>
           <span class="btn-desc">So funktioniert es – Kurzanleitung</span>
         </span>
       </a>
-
     </div>
 
     <div class="divider">oder</div>
 
-    <!-- Confetti Button -->
     <button id="confettiBtn" onclick="launchConfetti()">
       🎉 Nochmal feiern!
     </button>
 
   </main>
 
-  <!-- Footer with Logos -->
   <footer>
     <span class="footer-label">unterstützt von</span>
     <div class="logo-row">
-      <img
-        class="ohm-footer-logo"
-        src="Assets/Ohm Logo.webp"
-        alt="TH Nürnberg"
-        onerror="this.alt='TH Nürnberg'; this.style.display='none';"
-      />
+      <img class="ohm-footer-logo" src="Assets/Ohm Logo.webp" alt="TH Nürnberg" />
       <div class="logo-divider"></div>
       <a href="https://smarttap-offical.de/" target="_blank" rel="noopener">
-        <img
-          class="smarttap-logo"
-          src="Assets/smarttap_logo.png"
-          alt="SmartTap"
-        />
+        <img class="smarttap-logo" src="Assets/smarttap_logo.png" alt="SmartTap" />
       </a>
     </div>
   </footer>
 
   <script>
-    // ── Confetti burst ──
     function launchConfetti() {
       const colors = ['#E2001A', '#F0C040', '#ffffff', '#ff6b6b', '#ffd93d'];
-
-      // Left burst
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { x: 0.2, y: 0.6 },
-        colors,
-        gravity: 0.9,
-        scalar: 1.1,
-      });
-
-      // Right burst
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { x: 0.8, y: 0.6 },
-        colors,
-        gravity: 0.9,
-        scalar: 1.1,
-      });
-
-      // Center shower after short delay
+      confetti({ particleCount: 80, spread: 60, origin: { x: 0.2, y: 0.6 }, colors, gravity: 0.9, scalar: 1.1 });
+      confetti({ particleCount: 80, spread: 60, origin: { x: 0.8, y: 0.6 }, colors, gravity: 0.9, scalar: 1.1 });
       setTimeout(() => {
-        confetti({
-          particleCount: 120,
-          spread: 100,
-          origin: { x: 0.5, y: 0.4 },
-          colors,
-          gravity: 0.7,
-          scalar: 1.2,
-          startVelocity: 35,
-        });
+        confetti({ particleCount: 120, spread: 100, origin: { x: 0.5, y: 0.4 }, colors, gravity: 0.7, scalar: 1.2, startVelocity: 35 });
       }, 250);
     }
-
-    // Auto-launch on page load
-    window.addEventListener('load', () => {
-      setTimeout(launchConfetti, 400);
-    });
+    window.addEventListener('load', () => setTimeout(launchConfetti, 400));
   </script>
 
 </body>
