@@ -21,7 +21,7 @@
 
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--ohm-dark);
+      background: var(--ohm-dark) url('Assets/background.jpg') center/cover fixed;
       color: #fff;
       min-height: 100dvh;
       display: flex;
@@ -40,7 +40,7 @@
     }
 
     header img.ohm-logo {
-      height: 52px;
+      height: 80px;
       object-fit: contain;
       filter: brightness(0) invert(1);
     }
@@ -226,20 +226,42 @@
       opacity: 0.85;
     }
 
+    /* ── Hero Shout ── */
+    .hero-shout {
+      font-size: clamp(2rem, 8vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      background: linear-gradient(120deg, #F0C040 0%, #FF9500 40%, #F0C040 80%, #FFD700 100%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: goldShimmer 2.5s linear infinite;
+      padding: 4px 0;
+    }
+    @keyframes goldShimmer {
+      from { background-position: 0% center; }
+      to   { background-position: 250% center; }
+    }
+    .shout-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
     .logo-divider {
       width: 1px;
       height: 32px;
       background: rgba(255,255,255,0.2);
     }
 
-    /* ── Stars background ── */
+    /* ── Dark overlay over background image ── */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 20%, rgba(226,0,26,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(240,192,64,0.06) 0%, transparent 60%);
+      background: rgba(15, 5, 5, 0.62);
       pointer-events: none;
       z-index: 0;
     }
@@ -271,7 +293,7 @@
   <header>
     <img
       class="ohm-logo"
-      src="https://www.th-nuernberg.de/typo3conf/ext/ohm_template/Resources/Public/Images/th-nuernberg-logo.svg"
+      src="Assets/Ohm Logo.webp"
       alt="TH Nürnberg – Technische Hochschule Georg Simon Ohm"
       onerror="this.style.display='none'; document.getElementById('ohm-text-fallback').style.display='block';"
     />
@@ -294,10 +316,9 @@
       <h1>Herzlichen Glückwunsch,<br /><span>EFI-Absolventinnen<br />&amp; Absolventen!</span></h1>
     </div>
 
-    <p class="subtitle">
-      Ihr habt es geschafft! Feiert euren Abschluss an der Fakultät
-      Elektrotechnik Feinwerktechnik Informationstechnik der TH Nürnberg.
-    </p>
+    <div class="shout-wrap">
+      <div class="hero-shout">Ihr habt es geschafft!</div>
+    </div>
 
     <!-- CTA Buttons -->
     <div class="btn-group">
@@ -345,7 +366,7 @@
     <div class="logo-row">
       <img
         class="ohm-footer-logo"
-        src="https://www.th-nuernberg.de/typo3conf/ext/ohm_template/Resources/Public/Images/th-nuernberg-logo.svg"
+        src="Assets/Ohm Logo.webp"
         alt="TH Nürnberg"
         onerror="this.alt='TH Nürnberg'; this.style.display='none';"
       />
